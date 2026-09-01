@@ -1,59 +1,27 @@
 <template>
+  <header class="navbar">
+    
+    <!-- Bungkus logo dan judul di dalam satu div ini -->
+    <div class="brand-container">
+      <img src="/stechoq-logo.png" alt="Logo Stechoq" class="logo" />
+      <div class="brand">Web Laporan Harian Magang Rafli.</div>
+    </div>
+
+    <!-- Navigasi tetap di luar bungkus tadi -->
+    <nav class="nav-right">
+      <router-link to="/" class="nav-link" exact-active-class="active">
+        Dashboard
+      </router-link>
+      <router-link to="/laporan" class="nav-link" active-class="active">
+        Daftar Laporan
+      </router-link>
+    </nav>
+    
+  </header>
   <main>
-    <h1>Web Laporan Harian Magang</h1>
-    <ReportForm :editing="editing" @saved="onSaved" @cancel-edit="cancelEdit" />
-    <ReportTable :reports="reports" :loading="loading" @refresh="loadReports" @edit="onEdit" @delete="onDelete" />
+    <router-view />
   </main>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import api from "./services/api";
-import ReportForm from "./components/ReportForm.vue";
-import ReportTable from "./components/ReportTable.vue";
-
-const reports = ref([]);
-const loading = ref(false);
-const editing = ref(null);
-
-async function loadReports() {
-  loading.value = true;
-  try {
-    const response = await api.get("/api/reports");
-    reports.value = response.data.data;
-  } catch (error) {
-    console.error("Gagal mengambil daftar laporan:", error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-function onEdit(report) {
-  editing.value = report;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function onSaved() {
-  editing.value = null;
-  loadReports();
-}
-
-function cancelEdit() {
-  editing.value = null;
-}
-
-async function onDelete(report) {
-  if (!confirm(`Hapus laporan "${report.judul_tugas}"?`)) return;
-  try {
-    await api.delete(`/api/reports/${report._id}`);
-    loadReports();
-  } catch (error) {
-    console.error("Gagal menghapus laporan:", error);
-  }
-}
-
-onMounted(loadReports);
-</script>
 
 <style>
 :root {
@@ -67,6 +35,60 @@ body {
   color: #1f2937;
 }
 
+.navbar {
+  background: #568496;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  box-shadow: 0 2px 4px rgba(14, 70, 255, 0.192);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Memberikan jarak agar logo dan teks tidak menempel */
+}
+
+.nav-link {
+  color: #dbeafe;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  background: #27429a;
+  color: #ffffff;
+}
+
+.nav-link.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.logo {
+  height: 40px;         /* Patokan tinggi logo */
+  max-width: 200px;     /* Batas maksimal lebar agar tidak menabrak menu */
+  object-fit: contain;  /* Memastikan logo mengecil secara proporsional tanpa gepeng */
+}
+
 main {
   max-width: 1000px;
   margin: 0 auto;
@@ -77,5 +99,13 @@ h1 {
   text-align: center;
   margin-bottom: 24px;
   color: #1e3a8a;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
 }
 </style>
