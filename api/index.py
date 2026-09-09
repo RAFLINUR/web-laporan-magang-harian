@@ -71,7 +71,7 @@ def create_report():
 
 @app.route("/api/reports", methods=["GET"])
 def get_reports():
-    reports = list(reports_collection.find().sort("dibuat_pada", -1))
+    reports = list(reports_collection.find().sort("tanggal", 1))
     for report in reports:
         report["_id"] = str(report["_id"])
     return jsonify({"data": reports}), 200
