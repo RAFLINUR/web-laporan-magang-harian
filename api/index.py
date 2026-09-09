@@ -77,6 +77,21 @@ def get_reports():
     return jsonify({"data": reports}), 200
 
 
+@app.route("/api/reports/<report_id>", methods=["GET"])
+def get_report(report_id):
+    try:
+        obj_id = ObjectId(report_id)
+    except Exception:
+        return jsonify({"error": "ID laporan tidak valid"}), 400
+
+    report = reports_collection.find_one({"_id": obj_id})
+    if not report:
+        return jsonify({"error": "Laporan tidak ditemukan"}), 404
+
+    report["_id"] = str(report["_id"])
+    return jsonify({"data": report}), 200
+
+
 @app.route("/api/reports/<report_id>", methods=["PUT"])
 def update_report(report_id):
     judul_tugas = request.form.get("judul_tugas")

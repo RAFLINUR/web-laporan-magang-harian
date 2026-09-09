@@ -229,6 +229,13 @@ th {
 .btn-edit {
   background: #dbeafe;
   color: #1d4ed8;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 6px;
 }
 
 .btn-edit:hover {

@@ -49,7 +49,7 @@
           @change="handleFileChange"
           accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
         />
-        <small v-if="isEditing && !selectedFile.value" class="hint">
+        <small v-if="isEditing && !selectedFile" class="hint">
           Kosongkan jika tidak ingin mengganti lampiran saat ini.
         </small>
       </div>
@@ -129,7 +129,8 @@ watch(
       isEditing.value = false;
       resetForm();
     }
-  }
+  },
+  { immediate: true }
 );
 
 function handleFileChange(event) {

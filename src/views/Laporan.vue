@@ -2,7 +2,12 @@
   <div>
     <h1>Daftar Laporan</h1>
 
-    <ReportForm v-if="editing" :editing="editing" @saved="onSaved" @cancel-edit="cancelEdit" />
+    <ReportForm
+      v-if="editing"
+      :editing="editing"
+      @saved="onSaved"
+      @cancel-edit="cancelEdit"
+    />
 
     <ReportTable
       :reports="reports"
@@ -37,7 +42,7 @@ async function loadReports() {
 }
 
 function onEdit(report) {
-  editing.value = report;
+  editing.value = { ...report };
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
